@@ -2,15 +2,19 @@
 
 ## Daftar Isi
 
+- [Run without compiling](#run-without-compiling)
+
+## Run with GUI (without compiling)
+1. From root directory, run game using
+    ```java -jar Tucil3_13522050.jar```
+
 - [Compile and running](#compile-and-running)
 
-## Compile and running
-1. Go to src directory using
-    ```cd src```
-2. Compile java files using
-    ```javac -d ../bin *.java```
-3. Run from the src directory using 
-    ```java -cp ../bin src.Main```
+## Compile and run with GUI
+1. From root directory, compile java files using
+    ```javac -d bin src/*.java```
+2. Run from the root directory using 
+    ```java -cp bin src.Game```
 
 ## Author
 

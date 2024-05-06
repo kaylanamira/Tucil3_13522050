@@ -1,9 +1,8 @@
 package src;
 
 
-public class AStar extends Solver {
-
-    public AStar(String startWord, String endWord, Dictionary dictionary) {
+public class GBFS extends Solver{
+    public GBFS(String startWord, String endWord, Dictionary dictionary) {
         super(startWord, endWord, dictionary);
     }
 
@@ -43,8 +42,7 @@ public class AStar extends Solver {
                         continue;
                     }
                     // Add new word to the queue
-                    int cost = calculateHeuristic(newWord, endWord) + calculateCost(currentWord);
-                    queue.add(new Word(newWord, currentWord, cost));
+                    queue.add(new Word(newWord, currentWord, calculateHeuristic(newWord, endWord)));
                 }
                 characters[j] = originalChar;
             }

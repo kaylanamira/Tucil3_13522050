@@ -1,72 +1,48 @@
 package src;
 
-import java.util.LinkedList;
-
 public class Word {
-    protected String word;
-    protected int heuristic;
-    protected int cost;
-    protected LinkedList<String> path;
+    protected String word;      // word name
+    protected int cost;         // cost value
+    protected Word parent;      // previous Word
     
+    /*Constructor for startWord */
     public Word(String word){
-        this.path =  new LinkedList<>();
+        this.parent =  null;
         this.word = word;
         this.cost = 0;
-        this.heuristic = 0;
     }
 
-    public Word(String word, Word parentWord, String endword){
-        this.path = new LinkedList<>();
-        for (String w : parentWord.path){
-            this.path.add(w);
-        }
-        this.path.add(parentWord.word);
+    /*Constructor for word */
+    public Word(String word, Word parentWord, int cost){
         this.word = word;
-        this.cost = parentWord.getCost() + 1;
-
-        // heuristic calculation
-        int offset = 0;
-        int len = word.length();
-        for (int i = 0; i < len; i++){
-            if (word.charAt(i) != endword.charAt(i)){
-                offset ++;
-            }
-        }
-        this.heuristic = offset;
+        this.cost = cost;       
+        this.parent = parentWord;
     }
 
+    /* GETTERS */
     public String getWord(){
         return this.word;
-    }
-    
-    public int getHeuristic(){
-        return this.heuristic;
     }
 
     public int getCost(){
         return this.cost;
     }
 
-    public LinkedList<String> getPath(){
-        return this.path;
-    }
-    
-    public void setHeuristic(int h){
-        this.heuristic = h;
+    public Word getparent(){
+        return this.parent;
     }
 
-    public void setCost(int cost){
-        this.cost = cost;
-    }
-
-    public void printPathToWord(){
-        System.out.printf("h(n): %d ,", this.heuristic);
-        System.out.printf("g(n): %d ,", this.cost);
+    // Debugging purpose
+    public void printPath(){
+        System.out.printf("f(n): %d,", this.cost);
         System.out.printf("Path to %s: ", this.word);
-        for (String p : path){
-            System.out.printf("%s -> ", p);
+        Word ancestor = parent;
+        String path = this.word;
+        while (ancestor != null){
+            path = ancestor.getWord() + "->" + path;
+            ancestor = ancestor.getparent();
         }
-        System.out.println(this.word);
+        System.out.println(path);
         System.out.println();
     }
 }

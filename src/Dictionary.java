@@ -10,8 +10,8 @@ public class Dictionary {
 
     public Dictionary(int length) throws FileNotFoundException {
         this.wordLength = length;
-        Scanner s = new Scanner(new File("dictionary.txt"));;
-        words = new HashSet<String>(); 
+        Scanner s = new Scanner(new File("src/dictionary.txt"));
+        words = new HashSet<>();
         while (s.hasNext()){
             String nextWord = s.next();
             if (nextWord.length() == length){
@@ -26,6 +26,7 @@ public class Dictionary {
         return this.words.contains(word.toLowerCase());
     }
 
+    //Debugging purpose
     public void printDictionary(){
         for (String word : words){
             System.out.println(word);
