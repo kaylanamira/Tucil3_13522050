@@ -1,6 +1,7 @@
 package src;
 
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -33,25 +34,28 @@ public class Game extends JPanel {
     }
 
     public void initAlgorithm(String startWord, String endWord, int algoType) {
-        clearResult("",0,0);
+        clearResult("",0,0,"0");
         try {
             int len = startWord.length();
             if (len != endWord.length()){
-                String errmsg = "Startword and endword are not in the same length!\n";
-                clearResult(errmsg,0,0);
+                String errmsg = "Words must have same length!\n";
+                clearResult(errmsg,0,0,"0");
                 System.out.println(errorMsg);
+                return;
             }
             else if (startWord.equals(endWord)){
                 String errmsg = "Start word is equal to end word!\n";
-                clearResult(errmsg,0,0);
+                clearResult(errmsg,0,0,"0");
                 System.out.println(errorMsg);
+                return;
             }
             else{
                 Dictionary d = new Dictionary(len);
                 if (!d.contains(startWord) || !d.contains(endWord)){
                     String errmsg = "Your word is not on dictionary!\n";
-                    clearResult(errmsg,0,0);
+                    clearResult(errmsg,0,0,"0");
                     System.out.println(errorMsg);
+                    return;
                 }
 
                 long startTime = System.nanoTime();
@@ -69,9 +73,12 @@ public class Game extends JPanel {
                 long duration = (endTime - startTime);
                 this.solver.printResult();
 
-                String formatedSeconds = String.format("%d ms", duration/1000000);
-                System.out.println("total runtime = "+ formatedSeconds);
-                this.runtime = formatedSeconds;
+                double milliseconds = duration / 1_000_000.0;
+                DecimalFormat df = new DecimalFormat("#0.000");
+                String formattedDuration = df.format(milliseconds) + " ms";
+
+                System.out.println("Total runtime: " + formattedDuration);
+                this.runtime = formattedDuration;
                 this.visitedLength = solver.visitedWords;
                 if (this.solver.result.size() > 0) {
                     this.setBoard(this.solver);
@@ -80,25 +87,26 @@ public class Game extends JPanel {
                 }
                 else{
                     this.errorMsg = "No path found!\n";
-                    clearResult(errorMsg, 0, visitedLength);
+                    clearResult(errorMsg, 0, visitedLength, formattedDuration);
                 }
                 // return this.solver.result;
             }
         } catch (FileNotFoundException e) {
             String errmsg = "No dictionary file found\n";
-            clearResult(errmsg,0,0);
+            clearResult(errmsg,0,0,"0");
             System.out.println(errorMsg);
+            return;
             // return null;
         } 
         
     }
 
-    public void clearResult(String errmsg, int pathLength, int visitedLength){
+    public void clearResult(String errmsg, int pathLength, int visitedLength, String runtime){
         this.remove(board);
         this.board = new Board();
         this.add(board);
         this.errorMsg = errmsg;
-        this.runtime = "0 ms";
+        this.runtime = runtime;
         this.pathLength = pathLength;
         this.visitedLength = visitedLength;
         this.revalidate(); 
@@ -112,7 +120,7 @@ public class Game extends JPanel {
         wordPanel.setBorder(getBorder());
         wordPanel.setLayout(new GridLayout(4, 1));
         wordPanel.setBackground(Color.white);
-        wordPanel.setPreferredSize(new Dimension(200, 150));
+        wordPanel.setPreferredSize(new Dimension(250, 150));
         JLabel labelStartWord = new JLabel("Start word: ");
         labelStartWord.setHorizontalAlignment(SwingConstants.CENTER);
         JTextField fieldStartWord = new JTextField(10);
@@ -129,7 +137,7 @@ public class Game extends JPanel {
         centerPanel.setBorder(getBorder());
         centerPanel.setLayout(new BorderLayout());
         centerPanel.setOpaque(false);
-        centerPanel.setPreferredSize(new Dimension(200, 150));
+        centerPanel.setPreferredSize(new Dimension(250, 150));
         JPanel radioPanel = new JPanel(new GridLayout(3, 1));
         radioPanel.setOpaque(false);
         JRadioButton radioButtonGBFS = new JRadioButton("Greedy BFS");
@@ -147,7 +155,7 @@ public class Game extends JPanel {
         JPanel resultPanel = new RoundedPanel(18,18);
         resultPanel.setBorder(getBorder());
         resultPanel.setLayout(new GridLayout(0, 1));
-        resultPanel.setPreferredSize(new Dimension(200, 150));
+        resultPanel.setPreferredSize(new Dimension(250, 150));
         JLabel runtimeLabel = new JLabel("Runtime: ");
         runtimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         JTextField runtimeText = new JTextField(10); //to do..
@@ -225,7 +233,7 @@ public class Game extends JPanel {
         game.setBorder(new EmptyBorder(20, 20, 20, 20)); //Spacer = 20
         f.add(game);
         f.pack(); //sized window to fit the preferred size and layouts of its subcomponents
-        f.setSize(600,620);
+        f.setSize(620,640);
         game.startGame();
         f.setVisible(true);
     }

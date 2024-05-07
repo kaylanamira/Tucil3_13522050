@@ -3,12 +3,11 @@
 ## Daftar Isi
 
 - [Run without compiling](#run-without-compiling)
+- [Compile and running](#compile-and-running)
 
 ## Run with GUI (without compiling)
-1. From root directory, run game using
+From root directory, run game using
     ```java -jar Tucil3_13522050.jar```
-
-- [Compile and running](#compile-and-running)
 
 ## Compile and run with GUI
 1. From root directory, compile java files using
